@@ -1,0 +1,17 @@
+TYPE,CONTENT,PRIORITY,INDENT,AUTHOR,RESPONSIBLE,DATE,DATE_LANG,TIMEZONE
+task,Something @tag1,4,1,Username (123456),,14 Sep,en,Europe/Copenhagen
+note,This is a comment,,,Username (123456),,,,
+note,Another comment,,,Username (123456),,,,
+note,"This is a very long comment
+
+with
+multiple
+lines
+
+and more...",,,Username (123456),,,,,,,,,,,,
+task,Something else,4,1,Username (123456),,14 Sep,en,Europe/Copenhagen
+,,,,,,,,
+task,A third thing,4,1,Username (123456),,14 Sep,en,Europe/Copenhagen
+,,,,,,,,
+task,Something repeating,4,1,Username (123456),,2017-09-21 Monthly,en,Europe/Copenhagen
+,,,,,,,,

@@ -1,0 +1,7 @@
+"TASK","FOLDER","CONTEXT","GOAL","LOCATION","STARTDATE","STARTTIME","DUEDATE","DUETIME","REPEAT","LENGTH","TIMER","PRIORITY","TAG","STATUS","STAR","NOTE"
+"Something","Personal",,,,,,"2017-09-14",,,,,,,,,"This is a
+multiline
+note"
+"Something else","Personal",,,,,,"2017-09-14",,,,,,,,,"This is a short note"
+"Something repeating","Personal",,,,,,"2017-09-14",,"Monthly",,,,,,,"This is a short note"
+"Test tags","Personal",,,,,,"2017-09-21",,,,,"1","tag1, tag2",,"Yes",
