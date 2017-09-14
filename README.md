@@ -24,3 +24,7 @@ Toodledo priorities go from -1 to 3. 0 is "Low" and is the default value. 3 is "
 Todoist priorities go from 4 (which is the default) to 1 (which is the top priority).
 
 Todoist entries can be composed of multiple consecutive lines ending with a line with all empty entries.
+
+## TODO
+There seems to be a problem when importing "Bimonthly" tasks (the same problem occurs
+when calling them "every 2 months")
