@@ -18,3 +18,5 @@ Add support for
 Toodledo priorities go from -1 to 3. 0 is "Low" and is the default value. 3 is "Top".
 
 Todoist priorities go from 4 (which is the default) to 1 (which is the top priority).
+
+Todoist entries can be composed of multiple consecutive lines ending with a line with all empty entries.
