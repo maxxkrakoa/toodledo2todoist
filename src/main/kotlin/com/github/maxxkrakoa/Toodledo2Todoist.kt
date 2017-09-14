@@ -109,7 +109,9 @@ fun convertToodledoTaskAndTags(task: String?, tag: String?): String {
     if (tag != null) {
         val tags = tag.split(",")
         for (currentTag in tags) {
-            retval += " @" + currentTag.trim()
+            if (currentTag.trim() != "") {
+                retval += " @" + currentTag.trim()
+            }
         }
     }
 
