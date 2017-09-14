@@ -27,4 +27,4 @@ Todoist entries can be composed of multiple consecutive lines ending with a line
 
 ## TODO
 There seems to be a problem when importing "Bimonthly" tasks (the same problem occurs
-when calling them "every 2 months")
+when calling them "every 2 months"). Turns out it is impossible to create recurring events that start in the past.
