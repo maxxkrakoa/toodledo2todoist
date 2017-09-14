@@ -87,7 +87,7 @@ fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableMap<S
     val itemsMap = mutableMapOf<String, MutableList<TodoistItem>>()
 
     for (toodledoItem in toodledoItems) {
-        val item = TodoistItem(toodledoItem.TASK, // TODO: add tags
+        val item = TodoistItem(convertToodledoTaskAndTags(toodledoItem.TASK, toodledoItem.TAG),
                 convertToodledoPriority(toodledoItem.PRIORITY),
                 toodledoItem.DUEDATE + " " + toodledoItem.REPEAT,
                 toodledoItem.NOTE)
@@ -99,6 +99,21 @@ fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableMap<S
     }
 
     return itemsMap
+}
+
+fun convertToodledoTaskAndTags(task: String?, tag: String?): String {
+    var retval = ""
+
+    retval += task
+
+    if (tag != null) {
+        val tags = tag.split(",")
+        for (currentTag in tags) {
+            retval += " @" + currentTag.trim()
+        }
+    }
+
+    return retval
 }
 
 fun convertToodledoPriority(priority: String?): String {
