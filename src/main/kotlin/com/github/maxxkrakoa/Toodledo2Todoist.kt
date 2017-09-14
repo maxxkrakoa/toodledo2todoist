@@ -1,7 +1,6 @@
 package com.github.maxxkrakoa
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
-import com.sun.xml.internal.bind.v2.TODO
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -45,28 +44,29 @@ fun main(args: Array<String>) {
 
     val f = File(args[0])
     val toodledoItems = loadToodledoItems(f)
-
-    // TODO: should convert to a Map of Lists of TodoistItems - mapping from Toodledo folder to items
-    // TODO: export should write one file per Map entry for easy import into Todoist
-    val todoistItems = convertToTodoist(toodledoItems)
-    val outF = File(args[1] + "todoist.csv")
-    saveTodoistItems(todoistItems, outF)
+    val todoistItemsMap = convertToTodoist(toodledoItems)
+    val outDir = File(args[1])
+    saveTodoistItems(todoistItemsMap, outDir)
 }
 
-private fun saveTodoistItems(todoistItems: MutableList<TodoistItem>, outF: File) {
+private fun saveTodoistItems(todoistItemsMap: MutableMap<String, MutableList<TodoistItem>>, outDir: File) {
     val mapper = CsvMapper()
     val schema = mapper.schemaFor(TodoistLineItemJava::class.java).withColumnSeparator(',').withUseHeader(true)
     val writer = mapper.writerFor(TodoistLineItemJava::class.java).with(schema)
 
-    val lineItems = mutableListOf<TodoistLineItemJava>()
-    for (todoistItem in todoistItems) {
-        lineItems.add(todoistItem.taskLineItem)
-        if (todoistItem.noteLineItem != null) {
-            lineItems.add(todoistItem.noteLineItem!!)
+    for ((folder, todoistItems) in todoistItemsMap) {
+        val lineItems = mutableListOf<TodoistLineItemJava>()
+        for (todoistItem in todoistItems) {
+            lineItems.add(todoistItem.taskLineItem)
+            if (todoistItem.noteLineItem != null) {
+                lineItems.add(todoistItem.noteLineItem!!)
+            }
+            lineItems.add(emptyTodoistLineItem())
         }
-        lineItems.add(emptyTodoistLineItem())
+        val outF = File(outDir, folder + ".csv")
+        println("Writing " + outF)
+        writer.writeValues(outF).writeAll(lineItems)
     }
-    writer.writeValues(outF).writeAll(lineItems)
 }
 
 fun emptyTodoistLineItem(): TodoistLineItemJava {
@@ -83,17 +83,22 @@ fun emptyTodoistLineItem(): TodoistLineItemJava {
     return retval
 }
 
-fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableList<TodoistItem> {
-    val items = mutableListOf<TodoistItem>()
+fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableMap<String, MutableList<TodoistItem>> {
+    val itemsMap = mutableMapOf<String, MutableList<TodoistItem>>()
 
     for (toodledoItem in toodledoItems) {
-        items.add(TodoistItem(toodledoItem.TASK, // TODO: add tags
+        val item = TodoistItem(toodledoItem.TASK, // TODO: add tags
                 convertToodledoPriority(toodledoItem.PRIORITY),
                 toodledoItem.DUEDATE + " " + toodledoItem.REPEAT,
-                toodledoItem.NOTE))
+                toodledoItem.NOTE)
+
+        if (!itemsMap.containsKey(toodledoItem.FOLDER)) {
+            itemsMap.put(toodledoItem.FOLDER, mutableListOf<TodoistItem>())
+        }
+        itemsMap.get(toodledoItem.FOLDER)?.add(item)
     }
 
-    return items
+    return itemsMap
 }
 
 fun convertToodledoPriority(priority: String?): String {
