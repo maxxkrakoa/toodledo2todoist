@@ -2,6 +2,8 @@ package com.github.maxxkrakoa
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.system.exitProcess
 
 /**
@@ -85,12 +87,26 @@ fun emptyTodoistLineItem(): TodoistLineItemJava {
 
 fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableMap<String, MutableList<TodoistItem>> {
     val itemsMap = mutableMapOf<String, MutableList<TodoistItem>>()
+    val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+    val today = Date()
+    var warningDisplayed = false
 
     for (toodledoItem in toodledoItems) {
         val item = TodoistItem(convertToodledoTaskAndTags(toodledoItem.TASK, toodledoItem.TAG),
                 convertToodledoPriority(toodledoItem.PRIORITY),
                 toodledoItem.DUEDATE + " " + toodledoItem.REPEAT,
                 toodledoItem.NOTE)
+
+        if (toodledoItem.REPEAT?.trim() != "") {
+            // check if due date is in the past since Todoist doesn't support repeating events in the past
+            if (dateFormatter.parse(toodledoItem.DUEDATE).before(today)) {
+                if (!warningDisplayed) {
+                    println("One or more repeating events have a due date before today. Todoist doesn't handle that and they will import with no date set.")
+                    warningDisplayed = true
+                }
+                println(" - " + toodledoItem.TASK + " / " + toodledoItem.DUEDATE + " / " + toodledoItem.REPEAT)
+            }
+        }
 
         if (!itemsMap.containsKey(toodledoItem.FOLDER)) {
             itemsMap.put(toodledoItem.FOLDER, mutableListOf<TodoistItem>())
