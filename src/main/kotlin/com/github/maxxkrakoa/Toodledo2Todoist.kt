@@ -94,7 +94,7 @@ fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableMap<S
     for (toodledoItem in toodledoItems) {
         val item = TodoistItem(convertToodledoTaskAndTags(toodledoItem.TASK, toodledoItem.TAG),
                 convertToodledoPriority(toodledoItem.PRIORITY),
-                toodledoItem.DUEDATE + " " + toodledoItem.REPEAT,
+                toodledoItem.DUEDATE + " " + convertToodledoRepeat(toodledoItem.REPEAT),
                 toodledoItem.NOTE)
 
         if (toodledoItem.REPEAT?.trim() != "") {
@@ -115,6 +115,27 @@ fun convertToTodoist(toodledoItems: MutableList<ToodledoItemJava>): MutableMap<S
     }
 
     return itemsMap
+}
+
+/**
+ * Map from Toodledo repeat strings to something Todoist can parse
+ */
+fun convertToodledoRepeat(repeat: String?): String {
+    var retval = repeat
+
+    if (repeat == "Yearly") {
+        retval = "every year"
+    }
+
+    if (repeat == "Semiannually") {
+        retval = "every 6 months"
+    }
+
+    if (retval == null) {
+        retval = ""
+    }
+
+    return retval
 }
 
 fun convertToodledoTaskAndTags(task: String?, tag: String?): String {
