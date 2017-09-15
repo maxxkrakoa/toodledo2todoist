@@ -1,6 +1,8 @@
 # toodledo2todoist
 Simple conversion from Toodledo CSV Export to Todoist Import Template (CSV).
 
+In the "it works for me" state.
+
 Only supports a small set of Toodledo features, namely `task name`, 
 `folder`, `due date`, `repeat`, `note`, `tag`, `priority`.
 
@@ -26,5 +28,5 @@ Todoist priorities go from 4 (which is the default) to 1 (which is the top prior
 Todoist entries can be composed of multiple consecutive lines ending with a line with all empty entries.
 
 ## TODO
-There seems to be a problem when importing "Bimonthly" tasks (the same problem occurs
-when calling them "every 2 months"). Turns out it is impossible to create recurring events that start in the past.
+In Todoist it is impossible to create recurring events that start in the past. So if there are any
+of these present while converting a warning will be displayed.
